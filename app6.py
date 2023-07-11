@@ -330,7 +330,7 @@ with block:
             with gr.Group(elem_id="share-btn-container"):
                 community_icon = gr.HTML(community_icon_html)
                 loading_icon = gr.HTML(loading_icon_html)
-                # share_button = gr.Button("Share to community", elem_id="share-btn")
+                share_button = gr.Button("Share to community", elem_id="share-btn")
 
         with gr.Accordion("Advanced settings", open=False):
         #    gr.Markdown("Advanced settings are temporarily unavailable")

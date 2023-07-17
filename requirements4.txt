@@ -10,5 +10,5 @@ PyWavelets>=1.1.1
 opencv-python>=4.1.0.25
 safetensors
 gradio==3.11.0
-xformers==0.0.21.dev559
+xformers==0.0.21.dev561
 git+https://github.com/huggingface/diffusers.git

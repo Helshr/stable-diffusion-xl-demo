@@ -13,7 +13,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 
 # SDXL code: https://github.com/huggingface/diffusers/pull/3859
 
-model_dir = os.getenv("SDXL_MODEL_DIR")
+model_dir = '/workspace'
 access_token = os.getenv("ACCESS_TOKEN")
 
 if model_dir:
@@ -63,14 +63,6 @@ if enable_refiner:
 is_gpu_busy = False
 
 def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
-    print("prompt: ", prompt)
-    print("negative: ", negative)
-    print("scale: ", scale)
-    print("samples: ", samples)
-    print("steps: ", steps)
-    print("refiner_strength: ", refiner_strength)
-    print("num_images: ", num_images)
-
     prompt, negative = [prompt] * samples, [negative] * samples
     images_b64_list = []
 
@@ -384,7 +376,7 @@ with block:
         gr.HTML(
             """
                 <div class="footer">
-                    <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a>
+                    <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a> 
                     </p>
                 </div>
            """

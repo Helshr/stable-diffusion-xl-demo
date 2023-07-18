@@ -13,7 +13,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 
 # SDXL code: https://github.com/huggingface/diffusers/pull/3859
 
-model_dir = os.getenv("SDXL_MODEL_DIR")
+model_dir = '/workspace'
 access_token = os.getenv("ACCESS_TOKEN")
 
 if model_dir:
@@ -21,13 +21,13 @@ if model_dir:
     model_key_base = os.path.join(model_dir, "stable-diffusion-xl-base-0.9")
     model_key_refiner = os.path.join(model_dir, "stable-diffusion-xl-refiner-0.9")
 else:
-    model_key_base = "OwlMaster/gg"
-    model_key_refiner = "OwlMaster/gg2"
+    model_key_base = "stabilityai/stable-diffusion-xl-base-0.9"
+    model_key_refiner = "stabilityai/stable-diffusion-xl-refiner-0.9"
 
 # Use refiner (enabled by default)
 enable_refiner = os.getenv("ENABLE_REFINER", "true").lower() == "true"
 # Output images before the refiner and after the refiner
-output_images_before_refiner = os.getenv("OUTPUT_IMAGES_BEFORE_REFINER", "false").lower() == "true"
+output_images_before_refiner = True
 
 # Create public link
 share = os.getenv("SHARE", "false").lower() == "true"
@@ -47,7 +47,7 @@ pipe.enable_xformers_memory_efficient_attention()
 
 if enable_refiner:
     print("Loading model", model_key_refiner)
-    pipe_refiner = DiffusionPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token)
+    pipe_refiner = DiffusionPipeline.from_pretrained(model_key_refiner, torch_dtype=torch.float16, use_auth_token=access_token)
     #pipe_refiner.enable_model_cpu_offload()
     pipe_refiner.to("cuda")
 
@@ -61,41 +61,41 @@ if enable_refiner:
 
 
 is_gpu_busy = False
-def infer(prompt, negative, scale, samples=1, steps=50, refiner_steps=15, num_images=1):
+
+def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
     prompt, negative = [prompt] * samples, [negative] * samples
     images_b64_list = []
+
     for i in range(0, num_images):
         images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images
         os.makedirs(r"stable-diffusion-xl-demo/outputs", exist_ok=True)
         gc.collect()
         torch.cuda.empty_cache()
-
+        
+		
         if enable_refiner:
             if output_images_before_refiner:
                 for image in images:
                     buffered = BytesIO()
                     image.save(buffered, format="JPEG")
                     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-
+                    
                     image_b64 = (f"data:image/jpeg;base64,{img_str}")
                     images_b64_list.append(image_b64)
-                    # Save the image as PNG with unique timestamp
-                    filename = f"stable-diffusion-xl-demo/outputs/generated_image_{timestamp}_{i}.png"
-                    image.save(filename, format="PNG")
 
-            images = pipe_refiner(prompt=prompt, negative_prompt=negative, num_inference_steps=refiner_steps).images
+            images = pipe_refiner(prompt=prompt, negative_prompt=negative, image=images, num_inference_steps=steps, strength=refiner_strength).images
 
             gc.collect()
             torch.cuda.empty_cache()
 
         # Create the outputs folder if it doesn't exist
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        
 
         for i, image in enumerate(images):
             buffered = BytesIO()
             image.save(buffered, format="JPEG")
             img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             image_b64 = (f"data:image/jpeg;base64,{img_str}")
             images_b64_list.append(image_b64)
             # Save the image as PNG with unique timestamp
@@ -103,6 +103,7 @@ def infer(prompt, negative, scale, samples=1, steps=50, refiner_steps=15, num_im
             image.save(filename, format="PNG")
 
     return images_b64_list
+
 
     
     
@@ -386,9 +387,9 @@ with block:
             samples = gr.Slider(label="Images", minimum=1, maximum=8, value=1, step=1)
             steps = gr.Slider(label="Steps", minimum=1, maximum=250, value=50, step=1)
             if enable_refiner:
-                refiner_steps = gr.Slider(label="Refiner Steps", minimum=1, maximum=50, value=15, step=1)
+                refiner_strength = gr.Slider(label="Refiner Strength", minimum=0, maximum=1.0, value=0.3, step=0.1)
             else:
-                refiner_steps = gr.Slider(label="Refiner Steps (refiner not enabled)", minimum=0, maximum=0, value=0, step=1)
+                refiner_strength = gr.Slider(label="Refiner Strength (refiner not enabled)", minimum=0, maximum=0, value=0, step=0)
             guidance_scale = gr.Slider(
                 label="Guidance Scale", minimum=0, maximum=50, value=9, step=0.1
             )
@@ -402,9 +403,9 @@ with block:
 
         ex = gr.Examples(examples=examples, fn=infer, inputs=[text, negative, guidance_scale], outputs=[gallery, community_icon, loading_icon, share_button], cache_examples=False)
         ex.dataset.headers = [""]
-        negative.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_steps, num_images], outputs=[gallery], postprocess=False)
-        text.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_steps, num_images], outputs=[gallery], postprocess=False)
-        btn.click(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_steps, num_images], outputs=[gallery], postprocess=False)
+        negative.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)
+        text.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)
+        btn.click(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)		
         
         #advanced_button.click(
         #    None,

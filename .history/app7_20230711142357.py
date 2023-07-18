@@ -13,7 +13,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 
 # SDXL code: https://github.com/huggingface/diffusers/pull/3859
 
-model_dir = os.getenv("SDXL_MODEL_DIR")
+model_dir = '/workspace'
 access_token = os.getenv("ACCESS_TOKEN")
 
 if model_dir:
@@ -63,14 +63,6 @@ if enable_refiner:
 is_gpu_busy = False
 
 def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
-    print("prompt: ", prompt)
-    print("negative: ", negative)
-    print("scale: ", scale)
-    print("samples: ", samples)
-    print("steps: ", steps)
-    print("refiner_strength: ", refiner_strength)
-    print("num_images: ", num_images)
-
     prompt, negative = [prompt] * samples, [negative] * samples
     images_b64_list = []
 
@@ -282,10 +274,60 @@ with block:
                   font-size: 1.75rem;
                 "
               >
+                <svg
+                  width="0.65em"
+                  height="0.65em"
+                  viewBox="0 0 115 115"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="23" height="23" fill="white"></rect>
+                  <rect y="69" width="23" height="23" fill="white"></rect>
+                  <rect x="23" width="23" height="23" fill="#AEAEAE"></rect>
+                  <rect x="23" y="69" width="23" height="23" fill="#AEAEAE"></rect>
+                  <rect x="46" width="23" height="23" fill="white"></rect>
+                  <rect x="46" y="69" width="23" height="23" fill="white"></rect>
+                  <rect x="69" width="23" height="23" fill="black"></rect>
+                  <rect x="69" y="69" width="23" height="23" fill="black"></rect>
+                  <rect x="92" width="23" height="23" fill="#D9D9D9"></rect>
+                  <rect x="92" y="69" width="23" height="23" fill="#AEAEAE"></rect>
+                  <rect x="115" y="46" width="23" height="23" fill="white"></rect>
+                  <rect x="115" y="115" width="23" height="23" fill="white"></rect>
+                  <rect x="115" y="69" width="23" height="23" fill="#D9D9D9"></rect>
+                  <rect x="92" y="46" width="23" height="23" fill="#AEAEAE"></rect>
+                  <rect x="92" y="115" width="23" height="23" fill="#AEAEAE"></rect>
+                  <rect x="92" y="69" width="23" height="23" fill="white"></rect>
+                  <rect x="69" y="46" width="23" height="23" fill="white"></rect>
+                  <rect x="69" y="115" width="23" height="23" fill="white"></rect>
+                  <rect x="69" y="69" width="23" height="23" fill="#D9D9D9"></rect>
+                  <rect x="46" y="46" width="23" height="23" fill="black"></rect>
+                  <rect x="46" y="115" width="23" height="23" fill="black"></rect>
+                  <rect x="46" y="69" width="23" height="23" fill="black"></rect>
+                  <rect x="23" y="46" width="23" height="23" fill="#D9D9D9"></rect>
+                  <rect x="23" y="115" width="23" height="23" fill="#AEAEAE"></rect>
+                  <rect x="23" y="69" width="23" height="23" fill="black"></rect>
+                </svg>
                 <h1 style="font-weight: 900; margin-bottom: 7px;margin-top:5px">
                   Stable Diffusion XL 0.9 Demo
                 </h1>
               </div>
+              <p style="margin-bottom: 10px; font-size: 94%; line-height: 23px;">
+			    Brought you by SECourses : <a style="text-decoration: underline;" href="https://www.youtube.com/SECourses">https://www.youtube.com/SECourses</a>
+				<br/>
+				Please support me on Patreon : <a style="text-decoration: underline;" href="https://www.patreon.com/SECourses">https://www.patreon.com/SECourses</a>
+				<br/>
+				Patreon exclusive posts index : <a style="text-decoration: underline;" href="https://github.com/FurkanGozukara/Stable-Diffusion/blob/main/Patreon-Posts-Index.md">https://github.com/FurkanGozukara/Stable-Diffusion/blob/main/Patreon-Posts-Index.md</a>
+				<br/>
+                Stable Diffusion XL 0.9 is the latest text-to-image model from StabilityAI. 
+                <br/>
+                For faster generation and API access you can try
+                <a
+                  href="http://beta.dreamstudio.ai/"
+                  style="text-decoration: underline;"
+                  target="_blank"
+                  >DreamStudio Beta</a
+                >.</a>
+              </p>
             </div>
         """
     )
@@ -384,7 +426,7 @@ with block:
         gr.HTML(
             """
                 <div class="footer">
-                    <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a>
+                    <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a> 
                     </p>
                 </div>
            """

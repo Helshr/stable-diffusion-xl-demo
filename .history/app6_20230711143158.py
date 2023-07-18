@@ -14,7 +14,7 @@ from share_btn import community_icon_html, loading_icon_html, share_js
 # SDXL code: https://github.com/huggingface/diffusers/pull/3859
 
 model_dir = os.getenv("SDXL_MODEL_DIR")
-access_token = "your_token"
+access_token = os.getenv("ACCESS_TOKEN")
 
 if model_dir:
     # Use local model
@@ -274,60 +274,10 @@ with block:
                   font-size: 1.75rem;
                 "
               >
-                <svg
-                  width="0.65em"
-                  height="0.65em"
-                  viewBox="0 0 115 115"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect width="23" height="23" fill="white"></rect>
-                  <rect y="69" width="23" height="23" fill="white"></rect>
-                  <rect x="23" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="23" y="69" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="46" width="23" height="23" fill="white"></rect>
-                  <rect x="46" y="69" width="23" height="23" fill="white"></rect>
-                  <rect x="69" width="23" height="23" fill="black"></rect>
-                  <rect x="69" y="69" width="23" height="23" fill="black"></rect>
-                  <rect x="92" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="92" y="69" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="115" y="46" width="23" height="23" fill="white"></rect>
-                  <rect x="115" y="115" width="23" height="23" fill="white"></rect>
-                  <rect x="115" y="69" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="92" y="46" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="92" y="115" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="92" y="69" width="23" height="23" fill="white"></rect>
-                  <rect x="69" y="46" width="23" height="23" fill="white"></rect>
-                  <rect x="69" y="115" width="23" height="23" fill="white"></rect>
-                  <rect x="69" y="69" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="46" y="46" width="23" height="23" fill="black"></rect>
-                  <rect x="46" y="115" width="23" height="23" fill="black"></rect>
-                  <rect x="46" y="69" width="23" height="23" fill="black"></rect>
-                  <rect x="23" y="46" width="23" height="23" fill="#D9D9D9"></rect>
-                  <rect x="23" y="115" width="23" height="23" fill="#AEAEAE"></rect>
-                  <rect x="23" y="69" width="23" height="23" fill="black"></rect>
-                </svg>
                 <h1 style="font-weight: 900; margin-bottom: 7px;margin-top:5px">
                   Stable Diffusion XL 0.9 Demo
                 </h1>
               </div>
-              <p style="margin-bottom: 10px; font-size: 94%; line-height: 23px;">
-			    Brought you by SECourses : <a style="text-decoration: underline;" href="https://www.youtube.com/SECourses">https://www.youtube.com/SECourses</a>
-				<br/>
-				Please support me on Patreon : <a style="text-decoration: underline;" href="https://www.patreon.com/SECourses">https://www.patreon.com/SECourses</a>
-				<br/>
-				Patreon exclusive posts index : <a style="text-decoration: underline;" href="https://github.com/FurkanGozukara/Stable-Diffusion/blob/main/Patreon-Posts-Index.md">https://github.com/FurkanGozukara/Stable-Diffusion/blob/main/Patreon-Posts-Index.md</a>
-				<br/>
-                Stable Diffusion XL 0.9 is the latest text-to-image model from StabilityAI. 
-                <br/>
-                For faster generation and API access you can try
-                <a
-                  href="http://beta.dreamstudio.ai/"
-                  style="text-decoration: underline;"
-                  target="_blank"
-                  >DreamStudio Beta</a
-                >.</a>
-              </p>
             </div>
         """
     )
@@ -426,20 +376,20 @@ with block:
         gr.HTML(
             """
                 <div class="footer">
-                    <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a> - Gradio Demo by 🤗 Hugging Face and <a style="text-decoration: underline;" href="https://tonylian.com/">Long (Tony) Lian</a> & <a style="text-decoration: underline;" href="https://www.linkedin.com/in/furkangozukara/">Furkan Gözükara</a>
+                    <p>Model by <a href="https://huggingface.co/stabilityai" style="text-decoration: underline;" target="_blank">StabilityAI</a>
                     </p>
                 </div>
            """
         )
-        with gr.Accordion(label="License", open=False):
-            gr.HTML(
-                """<div class="acknowledgments">
-                    <p><h4>LICENSE</h4>
-The model is licensed with a <a href="https://huggingface.co/stabilityai/stable-diffusion-2/blob/main/LICENSE-MODEL" style="text-decoration: underline;" target="_blank">CreativeML OpenRAIL++</a> license. The authors claim no rights on the outputs you generate, you are free to use them and are accountable for their use which must not go against the provisions set in this license. The license forbids you from sharing any content that violates any laws, produce any harm to a person, disseminate any personal information that would be meant for harm, spread misinformation and target vulnerable groups. For the full list of restrictions please <a href="https://huggingface.co/spaces/CompVis/stable-diffusion-license" target="_blank" style="text-decoration: underline;" target="_blank">read the license</a></p>
-                    <p><h4>Biases and content acknowledgment</h4>
-Despite how impressive being able to turn text into image is, beware to the fact that this model may output content that reinforces or exacerbates societal biases, as well as realistic faces, pornography and violence. The model was trained on the <a href="https://laion.ai/blog/laion-5b/" style="text-decoration: underline;" target="_blank">LAION-5B dataset</a>, which scraped non-curated image-text-pairs from the internet (the exception being the removal of illegal content) and is meant for research purposes. You can read more in the <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4" style="text-decoration: underline;" target="_blank">model card</a></p>
-               </div>
-                """
-            )
+#         with gr.Accordion(label="License", open=False):
+#             gr.HTML(
+#                 """<div class="acknowledgments">
+#                     <p><h4>LICENSE</h4>
+# The model is licensed with a <a href="https://huggingface.co/stabilityai/stable-diffusion-2/blob/main/LICENSE-MODEL" style="text-decoration: underline;" target="_blank">CreativeML OpenRAIL++</a> license. The authors claim no rights on the outputs you generate, you are free to use them and are accountable for their use which must not go against the provisions set in this license. The license forbids you from sharing any content that violates any laws, produce any harm to a person, disseminate any personal information that would be meant for harm, spread misinformation and target vulnerable groups. For the full list of restrictions please <a href="https://huggingface.co/spaces/CompVis/stable-diffusion-license" target="_blank" style="text-decoration: underline;" target="_blank">read the license</a></p>
+#                     <p><h4>Biases and content acknowledgment</h4>
+# Despite how impressive being able to turn text into image is, beware to the fact that this model may output content that reinforces or exacerbates societal biases, as well as realistic faces, pornography and violence. The model was trained on the <a href="https://laion.ai/blog/laion-5b/" style="text-decoration: underline;" target="_blank">LAION-5B dataset</a>, which scraped non-curated image-text-pairs from the internet (the exception being the removal of illegal content) and is meant for research purposes. You can read more in the <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4" style="text-decoration: underline;" target="_blank">model card</a></p>
+#                </div>
+#                 """
+#             )
 
 block.queue().launch(share=share)

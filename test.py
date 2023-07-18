@@ -35,8 +35,8 @@ share = os.getenv("SHARE", "false").lower() == "true"
 print("Loading model", model_key_base)
 pipe = DiffusionPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token)
 
-#pipe.enable_model_cpu_offload()
-pipe.to("cuda")
+pipe.enable_model_cpu_offload()
+#pipe.to("cuda")
 
 # if using torch < 2.0
 pipe.enable_xformers_memory_efficient_attention()

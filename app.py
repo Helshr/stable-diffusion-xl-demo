@@ -363,7 +363,7 @@ with block:
         ex.dataset.headers = [""]
         negative.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)
         text.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)
-        btn.click(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)		
+        btn.click(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False, api_name="generate")		
         
         #advanced_button.click(
         #    None,

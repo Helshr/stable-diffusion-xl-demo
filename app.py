@@ -70,12 +70,14 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
     print("steps: ", steps)
     print("refiner_strength: ", refiner_strength)
     print("num_images: ", num_images)
+    print("enable_refiner: ", enable_refiner)
 
     prompt, negative = [prompt] * samples, [negative] * samples
     images_b64_list = []
 
     for i in range(0, num_images):
         images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images
+        print("success....")
         os.makedirs(r"stable-diffusion-xl-demo/outputs", exist_ok=True)
         gc.collect()
         torch.cuda.empty_cache()

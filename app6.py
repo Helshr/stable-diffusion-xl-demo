@@ -63,6 +63,14 @@ if enable_refiner:
 is_gpu_busy = False
 
 def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
+    print("prompt: ", prompt)
+    print("negative: ", negative)
+    print("scale: ", scale)
+    print("samples: ", samples)
+    print("steps: ", steps)
+    print("refiner_strength: ", refiner_strength)
+    print("num_images: ", num_images)
+
     prompt, negative = [prompt] * samples, [negative] * samples
     images_b64_list = []
 

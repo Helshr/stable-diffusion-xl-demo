@@ -1,6 +1,6 @@
 import gradio as gr
 
-from diffusers import DiffusionPipeline, StableDiffusionXLPipeline
+from diffusers import DiffusionPipeline
 import torch
 
 import base64
@@ -33,7 +33,7 @@ output_images_before_refiner = True
 share = os.getenv("SHARE", "false").lower() == "true"
 
 print("Loading model", model_key_base)
-pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token)
+pipe = DiffusionPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token)
 
 #pipe.enable_model_cpu_offload()
 pipe.to("cuda")
@@ -47,7 +47,7 @@ pipe.enable_xformers_memory_efficient_attention()
 
 if enable_refiner:
     print("Loading model", model_key_refiner)
-    pipe_refiner = StableDiffusionXLPipeline.from_pretrained(model_key_refiner, torch_dtype=torch.float16, use_auth_token=access_token)
+    pipe_refiner = DiffusionPipeline.from_pretrained(model_key_refiner, torch_dtype=torch.float16, use_auth_token=access_token)
     #pipe_refiner.enable_model_cpu_offload()
     pipe_refiner.to("cuda")
 

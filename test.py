@@ -62,7 +62,7 @@ if enable_refiner:
 
 is_gpu_busy = False
 
-def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
+def infer(prompt, negative, scale, samples=4, steps=25, refiner_strength=0.3, num_images=1):
     print("prompt: ", prompt)
     print("negative: ", negative)
     print("scale: ", scale)
@@ -115,3 +115,4 @@ prompt = "Pixar style, Disney style, colorful style, Children's Illustration Sty
 negative = "ugly,low quality, 3d, photorealistic,poorly Rendered face,poorly drawn face,poor facial details,poorly drawn hands,poorly rendered hands,low resolution,bad composition,mutated body parts,blurry image, disfigured, oversaturated,bad anatomy,deformed body features"
 scale = 9
 infer(prompt, negative, scale)
+

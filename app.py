@@ -33,10 +33,14 @@ output_images_before_refiner = True
 share = os.getenv("SHARE", "false").lower() == "true"
 
 print("Loading model", model_key_base)
-pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token)
-
+pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token, variant="fp16", use_safetensors=True)
+use_refiner = True
+refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, use_safetensors=True, variant="fp16"
+)
 #pipe.enable_model_cpu_offload()
 pipe.to("cuda")
+refiner.to("cuda")
 
 # if using torch < 2.0
 pipe.enable_xformers_memory_efficient_attention()
@@ -62,7 +66,7 @@ if enable_refiner:
 
 is_gpu_busy = False
 
-def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1, width=256, height=256):
+def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
     print("prompt: ", prompt)
     print("negative: ", negative)
     print("scale: ", scale)
@@ -75,19 +79,21 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
     images_b64_list = []
 
     for i in range(0, num_images):
-        images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps, width=width, height=height).images
+        image = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images[0]
+        image = refiner(prompt=prompt, image=image[None, :]).images[0]
+        images = [image]
         os.makedirs(r"stable-diffusion-xl-demo/outputs", exist_ok=True)
         gc.collect()
         torch.cuda.empty_cache()
-        
-		
+
+
         if enable_refiner:
             if output_images_before_refiner:
                 for image in images:
                     buffered = BytesIO()
                     image.save(buffered, format="JPEG")
                     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-                    
+
                     image_b64 = (f"data:image/jpeg;base64,{img_str}")
                     images_b64_list.append(image_b64)
 
@@ -97,7 +103,7 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
             torch.cuda.empty_cache()
 
         # Create the outputs folder if it doesn't exist
-        
+
         for i, image in enumerate(images):
             buffered = BytesIO()
             image.save(buffered, format="JPEG")
@@ -112,8 +118,8 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
     return images_b64_list
 
 
-    
-    
+
+
 css = """
         .gradio-container {
             font-family: 'IBM Plex Sans', sans-serif;
@@ -226,7 +232,7 @@ css = """
         #share-btn-container .wrap {
             display: none !important;
         }
-        
+
         .gr-form{
             flex: 1 1 50%; border-top-right-radius: 0; border-bottom-right-radius: 0;
         }
@@ -362,8 +368,8 @@ with block:
         ex.dataset.headers = [""]
         negative.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)
         text.submit(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False)
-        btn.click(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False, api_name="generate")		
-        
+        btn.click(infer, inputs=[text, negative, guidance_scale, samples, steps, refiner_strength, num_images], outputs=[gallery], postprocess=False, api_name="generate")
+
         #advanced_button.click(
         #    None,
         #    [],

@@ -41,8 +41,9 @@ refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
 #pipe.enable_model_cpu_offload()
 pipe.to("cuda")
 refiner.to("cuda")
+pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
+refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
 
-# if using torch < 2.0
 pipe.enable_xformers_memory_efficient_attention()
 
 

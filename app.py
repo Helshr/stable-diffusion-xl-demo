@@ -71,12 +71,11 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
     print("refiner_strength: ", refiner_strength)
     print("num_images: ", num_images)
     print("enable_refiner: ", enable_refiner)
-
     prompt, negative = [prompt] * samples, [negative] * samples
     images_b64_list = []
 
     for i in range(0, num_images):
-        images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps, width=256, height=256).images
+        images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images
         os.makedirs(r"stable-diffusion-xl-demo/outputs", exist_ok=True)
         gc.collect()
         torch.cuda.empty_cache()
@@ -99,7 +98,6 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
 
         # Create the outputs folder if it doesn't exist
         
-
         for i, image in enumerate(images):
             buffered = BytesIO()
             image.save(buffered, format="JPEG")

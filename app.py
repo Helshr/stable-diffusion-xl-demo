@@ -1,6 +1,6 @@
 import gradio as gr
 
-from diffusers import DiffusionPipeline, StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
+from diffusers import DiffusionPipeline, StableDiffusionXLPipeline
 import torch
 
 import base64
@@ -34,15 +34,7 @@ share = os.getenv("SHARE", "false").lower() == "true"
 
 print("Loading model", model_key_base)
 pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token, variant="fp16", use_safetensors=True)
-use_refiner = True
-refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, use_safetensors=True, variant="fp16", use_auth_token=access_token,)
-#pipe.enable_model_cpu_offload()
 pipe.to("cuda")
-refiner.to("cuda")
-pipe.unet = torch.compile(pipe.unet, mode="reduce-overhead", fullgraph=True)
-refiner.unet = torch.compile(refiner.unet, mode="reduce-overhead", fullgraph=True)
-#pipe.enable_model_cpu_offload()
-#refiner.enable_model_cpu_offload()
 pipe.enable_xformers_memory_efficient_attention()
 
 
@@ -79,9 +71,7 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
     images_b64_list = []
 
     for i in range(0, num_images):
-        image = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images[0]
-        image = refiner(prompt=prompt, image=image[None, :]).images[0]
-        images = [image]
+        images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images
         os.makedirs(r"stable-diffusion-xl-demo/outputs", exist_ok=True)
         gc.collect()
         torch.cuda.empty_cache()

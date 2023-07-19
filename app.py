@@ -1,6 +1,6 @@
 import gradio as gr
 
-from diffusers import DiffusionPipeline, StableDiffusionXLPipeline
+from diffusers import DiffusionPipeline, StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
 import torch
 
 import base64

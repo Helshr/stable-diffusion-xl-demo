@@ -35,9 +35,7 @@ share = os.getenv("SHARE", "false").lower() == "true"
 print("Loading model", model_key_base)
 pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token, variant="fp16", use_safetensors=True)
 use_refiner = True
-refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, use_safetensors=True, variant="fp16"
-)
+refiner = StableDiffusionXLImg2ImgPipeline.from_pretrained("stabilityai/stable-diffusion-xl-refiner-0.9", torch_dtype=torch.float16, use_safetensors=True, variant="fp16", use_auth_token=access_token,)
 #pipe.enable_model_cpu_offload()
 pipe.to("cuda")
 refiner.to("cuda")

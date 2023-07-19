@@ -62,7 +62,7 @@ if enable_refiner:
 
 is_gpu_busy = False
 
-def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1):
+def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, num_images=1, width=256, height=256):
     print("prompt: ", prompt)
     print("negative: ", negative)
     print("scale: ", scale)
@@ -75,7 +75,7 @@ def infer(prompt, negative, scale, samples=4, steps=50, refiner_strength=0.3, nu
     images_b64_list = []
 
     for i in range(0, num_images):
-        images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps).images
+        images = pipe(prompt=prompt, negative_prompt=negative, guidance_scale=scale, num_inference_steps=steps, width=width, height=height).images
         os.makedirs(r"stable-diffusion-xl-demo/outputs", exist_ok=True)
         gc.collect()
         torch.cuda.empty_cache()

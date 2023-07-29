@@ -12,7 +12,7 @@ from aliyun import MyAliyun
 
 
 model_dir = "/workspace/models/"
-access_token = "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"
+access_token = os.environ.get("HG_ACCESS_TOKEN")
 
 
 if model_dir:

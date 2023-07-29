@@ -78,7 +78,7 @@ def infer(item: Item):
             img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             filename = f"{timestamp}_{i}.png"
-            local_path = f"/workspace/stable-diffusion-xl-demo/stable-diffusion-xl-demo/outputs/{filename}"
+            local_path = f"/workspace/code/stable-diffusion-xl-demo/stable-diffusion-xl-demo/outputs/{filename}"
             image.save(local_path, format="PNG")
             oss_file_path = f"{remote_dir}{filename}"
             save_to_oss(oss_file_path, local_path)

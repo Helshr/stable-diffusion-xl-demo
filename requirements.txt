@@ -5,6 +5,10 @@ python-dotenv
 accelerate
 transformers
 invisible-watermark
+fastapi
+gunicorn
+uvicorn
+oss2
 numpy>=1.17
 PyWavelets>=1.1.1
 opencv-python>=4.1.0.25

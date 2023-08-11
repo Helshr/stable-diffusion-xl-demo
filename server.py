@@ -74,8 +74,6 @@ def infer(item: Item):
         torch.cuda.empty_cache()
         for i, image in enumerate(images):
             buffered = BytesIO()
-            image.save(buffered, format="JPEG")
-            img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             filename = f"{timestamp}_{i}.png"
             local_path = f"/workspace/code/stable-diffusion-xl-demo/stable-diffusion-xl-demo/outputs/{filename}"

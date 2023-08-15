@@ -82,4 +82,5 @@ def infer(item: Item):
             save_to_oss(oss_file_path, local_path)
             image_url = f"https://pailaimi-static.oss-cn-chengdu.aliyuncs.com/{oss_file_path}"
             images_url_list.append(image_url)
+            os.remove(local_path)
     return images_url_list

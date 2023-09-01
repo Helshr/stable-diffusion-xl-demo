@@ -13,5 +13,5 @@ numpy>=1.17
 PyWavelets>=1.1.1
 opencv-python>=4.1.0.25
 safetensors
-xformers==0.0.21.dev581
+xformers==0.0.21
 git+https://github.com/huggingface/diffusers.git

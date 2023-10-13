@@ -76,8 +76,13 @@ def infer(item: Item):
             buffered = BytesIO()
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             filename = f"{timestamp}_{i}.png"
+            print("start save image: ", datetime.now())
             local_path = f"/workspace/code/stable-diffusion-xl-demo/stable-diffusion-xl-demo/outputs/{filename}"
+            print("end save image: ", datetime.now())
             image.save(local_path, format="PNG")
+            new_image = Image.open(local_path)
+            new_image = new_image.resize((512, 512))
+            new_image.save(local_path)
             oss_file_path = f"{remote_dir}{filename}"
             save_to_oss(oss_file_path, local_path)
             image_url = f"https://pailaimi-static.oss-cn-chengdu.aliyuncs.com/{oss_file_path}"

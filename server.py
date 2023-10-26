@@ -1,4 +1,5 @@
 from typing import Union
+from PIL import Image
 import base64
 from fastapi import FastAPI
 from diffusers import DiffusionPipeline, StableDiffusionXLPipeline

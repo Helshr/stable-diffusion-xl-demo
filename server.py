@@ -35,7 +35,8 @@ enable_refiner = os.getenv("ENABLE_REFINER", "true").lower() == "true"
 output_images_before_refiner = True
 
 #pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token, variant="fp16",use_safetensors=True)
-pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16")
+pipe = StableDiffusionXLPipeline.from_pretrained(model_key_base, torch_dtype=torch.float16, use_auth_token=access_token, variant="fp16", use_safetensors=True)
+
 
 pipe.to("cuda")
 
